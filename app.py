@@ -80,6 +80,7 @@ if view_option == "Basic":
         prediction_proba = model.predict_proba(input_data_scaled)
         
         st.subheader("Prediction Result")
+        st.text("Disclaimer: This app is used for screening purposes only and not for diagnosis.")
         st.write("**Prediction:**", "Likely to have PCOS" if prediction[0] == 1 else "Unlikely to have PCOS")
         st.write("**Probability of PCOS:**", f"{prediction_proba[0][1]:.2%}")
 
