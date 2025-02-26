@@ -19,6 +19,7 @@ st.set_page_config(page_title="PCOS Prediction System", layout="wide")
 st.markdown(
     """
     <style>
+    
     /* Background color up to the title */
     .stApp {
         background: linear-gradient(to bottom, #FFC0CB, #FFFFFF 300px) !important;
