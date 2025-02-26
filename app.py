@@ -15,22 +15,49 @@ with open('feature_columns.json', 'r') as f:
 
 # App layout
 st.set_page_config(page_title="PCOS Prediction System", layout="wide")
+# Custom CSS for pink background
+st.markdown(
+    """
+    <style>
+    /* Background color up to the title */
+    .stApp {
+        background: linear-gradient(to bottom, #FFC0CB, #FFFFFF 300px) !important;
+    }
+
+    /* Sidebar background */
+    .stSidebar {
+        background-color: #FFB6C1 !important;
+    }
+    
+    </style>
+    
+    
+    """,
+    unsafe_allow_html=True
+)
+
 st.title("PCOS Prediction System")
 
 # Navigation Bar
-st.sidebar.title("Navigation")
-view_option = st.sidebar.radio("Choose Version", ["Basic", "Premium"])
+st.sidebar.title("Screeners")
+view_option = st.sidebar.radio("Choose Screener", ["PCOS Screener", "Endometriosis", "Uterine Fibroids", "Dysmenorrhoea", "Menorrhagia"])
 
-if view_option == "Basic":
-    st.header("Basic PCOS Prediction")
+if view_option == "PCOS Screener":
+    st.header("PCOS Screening Tool")
     
     with st.form(key='pcos_prediction_form'):
         col1, col2 = st.columns(2)
         with col1:
-            age = st.number_input("Age (years)")
-            weight = st.number_input("Weight (Kg)")
-            height = st.number_input("Height (Cm)")
-            bmi = st.number_input("BMI", min_value=15.0, max_value=45.0)
+            age = st.number_input("Age (years)", min_value=10, max_value=100)
+            weight = st.number_input("Weight (Kg)", min_value=20.0, max_value=200.0, step=0.1)
+            height = st.number_input("Height (Cm)", min_value=100.0, max_value=250.0, step=0.1)
+
+            # Auto-calculate BMI
+            bmi = None
+            if weight and height:
+                bmi = round(weight / ((height / 100) ** 2), 2)
+            st.number_input("BMI (auto compute)", value=bmi if bmi else 0.0, disabled=True)
+
             pulse_rate = st.number_input("Pulse rate (bpm)", min_value=50, max_value=150)
             cycle = st.selectbox("Cycle", options=[1, 2], format_func=lambda x: "Regular" if x == 1 else "Irregular")
             cycle_length = st.number_input("Period length (days)", min_value=1, max_value=20)
@@ -39,9 +66,15 @@ if view_option == "Basic":
         
         with col2:
             abortions = st.number_input("Number of Abortions", min_value=0, max_value=10)
-            hip = st.number_input("Hip (inch)", min_value=30, max_value=60)
-            waist = st.number_input("Waist (inch)", min_value=20, max_value=60)
-            waist_hip_ratio = st.number_input("Waist:Hip Ratio", min_value=0.5, max_value=1.5)
+            hip = st.number_input("Hip (inch)", min_value=30.0, max_value=60.0, step=0.1)
+            waist = st.number_input("Waist (inch)", min_value=20.0, max_value=60.0, step=0.1)
+
+            # Auto-calculate Waist-to-Hip Ratio
+            waist_hip_ratio = None
+            if waist and hip:
+                waist_hip_ratio = round(waist / hip, 2)
+            st.number_input("Waist:Hip Ratio (auto compute)", value=waist_hip_ratio if waist_hip_ratio else 0.0, disabled=True)
+
             weight_gain = st.selectbox("Weight Gain", options=['N', 'Y'])
             hair_growth = st.selectbox("Hair Growth", options=['N', 'Y'])
             skin_darkening = st.selectbox("Skin Darkening", options=['N', 'Y'])
@@ -84,7 +117,19 @@ if view_option == "Basic":
         st.write("**Prediction:**", "Likely to have PCOS" if prediction[0] == 1 else "Unlikely to have PCOS")
         st.write("**Probability of PCOS:**", f"{prediction_proba[0][1]:.2%}")
 
-elif view_option == "Premium":
-    st.header("Premium PCOS Prediction")
+elif view_option == "Endometriosis":
+    st.header("Endometriosis Screener")
+    st.subheader("Advanced AI Model Coming Soon!")
+    st.info("We are currently working on improving our prediction system with a more advanced AI model.")
+elif view_option == "Uterine Fibroids":
+    st.header("Uterine Fibroids Screener")
+    st.subheader("Advanced AI Model Coming Soon!")
+    st.info("We are currently working on improving our prediction system with a more advanced AI model.")
+elif view_option == "Dysmenorrhoea":
+    st.header("Dysmenorrhoea Screener")
+    st.subheader("Advanced AI Model Coming Soon!")
+    st.info("We are currently working on improving our prediction system with a more advanced AI model.")
+elif view_option == "Menorrhagia":
+    st.header("Menorrhagia Screener")
     st.subheader("Advanced AI Model Coming Soon!")
     st.info("We are currently working on improving our prediction system with a more advanced AI model.")
